@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图</title>
+	<link rel="stylesheet" href="lun.css">
+	<script src="animate.js"></script>
+</head>
+<body>
+	<div class="topp">
+		<div class="top">
+			<span id="wenzi" class="wenzi">[温馨提示]最近有不少不法分子在网上骗人，请大家注意！！！</span>
+		</div>
+		<img src="images/a15.png" alt="" style="float:left;margin-top:-18.5px;margin-left:410px;">
+	</div>
+	<div class="box" id="box" style="margin-top: 15px;">
+		<div class="pictures" id="pictures">
+			<div class="picture"><img src="images/b5.png" alt=""></div>
+			<div class="picture"><img src="images/b1.png" alt=""></div>
+			<div class="picture"><img src="images/b2.png" alt=""></div>
+			<div class="picture"><img src="images/b3.png" alt=""></div>
+			<div class="picture"><img src="images/b4.png" alt=""></div>
+			<div class="picture"><img src="images/b5.png" alt=""></div>
+			<div class="picture"><img src="images/b1.png" alt=""></div>
+		</div>
+		<span id="left"><</span>
+		<span id="right">></span>
+		<ul class="lis" id="lis">
+			<li class="change">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+	</div>
+	<script>
+		function getStyle(obj,style) {  
+			if(obj.currentStyle) 
+			{  
+		   	 	return obj.currentStyle[style];  
+			} 
+			else 
+			{  
+		    	return getComputedStyle(obj)[style];  
+			}
+		}
+		var b=document.getElementById("wenzi");
+		document.body.onload=function() {
+			setInterval(function() {
+				var n=parseInt(getStyle(b,"right"));
+				if(n===430) {
+					b.style.right=-850+"px";
+				}
+				else {
+					b.style.right=n+1+"px";
+				}
+			},15);
+		}
+		var timer;
+		var index=1;
+		var m=false;
+		var box=document.getElementById('box');
+		var lis=document.getElementById('lis').children;
+		var pictures=document.getElementById('pictures');
+		var left=document.getElementById('left');
+		var right=document.getElementById('right');
+		function next() {
+			if(!m){
+				m=true;
+				index++;
+				changecolor()
+				animate(pictures,{left:-1200*index},function() {
+					if(index===6) {
+						pictures.style.left="-1200px";
+						index=1;
+					}
+					m=false;
+				});
+			}
+		}
+		function pre() {
+			if(!m){
+				index--;
+				m=true;
+				changecolor();
+				animate(pictures,{left:-1200*index},function() {
+					if(index===0) {
+						pictures.style.left="-6000px";
+						index=5;
+					}
+					m=false;
+				});
+			}
+		}
+		var timer=setInterval(next,2000);
+		box.onmouseover=function() {
+			animate(left,{opacity:50});
+			animate(right ,{opacity:50}); 
+			clearInterval(timer);
+		}
+		box.onmouseout=function() {
+			animate(left,{opacity:0});
+			animate(right ,{opacity:0}); 
+			timer=setInterval(next,2000);
+		}
+		right.onclick=next;
+		left.onclick=pre;
+		for(var i=0;i<lis.length;i++){
+			lis[i].idx=i;
+			lis[i].onclick=function(){
+				index=this.idx+1;
+				changecolor();
+				animate(pictures,{left:-1200*index});
+			}
+		}
+		function changecolor(){
+			for(var i=0;i<lis.length;i++){
+				lis[i].style.background='#ccc';
+			}
+			if(index===6){
+				lis[0].style.background='red';
+			}
+			else if(index===0){
+				lis[4].style.background='red';
+			}
+			else{
+				lis[index-1].style.background='red';
+			}
+		}
+	</script>
+</body>
+</html>
